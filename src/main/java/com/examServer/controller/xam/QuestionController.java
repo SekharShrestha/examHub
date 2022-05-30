@@ -63,17 +63,24 @@ public class QuestionController {
 		for(Question q : questions) {
 			
 			Question question = this.questionService.get(q.getQid());
-			if(question.getAns().equals(q.getGivenAnswer())) {
-				correct++;
-				double marksSingle = questions.get(0).getExam().getMaxMarks()/questions.size();
-	            marksGot += marksSingle;
+			if(q.getGivenAnswer() == null) {
+				continue;
 			}
-			if(!q.getGivenAnswer().equals("") || q.getGivenAnswer() != null) {
-				attempted++;				
+			else {
+				if(question.getAns().equals(q.getGivenAnswer())) {
+					correct++;
+					double marksSingle = questions.get(0).getExam().getMaxMarks()/questions.size();
+		            marksGot += marksSingle;
+				}
+				if(!q.getGivenAnswer().equals("") || q.getGivenAnswer() != null) {
+					attempted++;				
+				}				
 			}
+			
 		}
 		
 		Map<String, Object> map = Map.of("marksGot", marksGot, "correct", correct, "attempted", attempted) ;
+//		System.out.println(map);
 		return ResponseEntity.ok(map);
 		
 	}
